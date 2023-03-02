@@ -1,0 +1,16 @@
+/**
+ * The following styles get applied inside the editor only.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+.body-input {
+    height: 200px;
+    width: 500px;
+}
+.title-input {
+    width: 500px;
+}
+.container {
+    display: flex;
+    flex-direction: column;
+}
