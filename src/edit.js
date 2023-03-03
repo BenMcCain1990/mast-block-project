@@ -35,18 +35,6 @@ import {
     arrowDown,
 } from '@wordpress/icons';
 
-function Example( props ) {
-    const { attributes, setAttributes } = props;
-    const [color, setColor] = useState();
-    return (
-        <ColorPicker
-            color={color}
-            onChange={setColor}
-            enableAlpha
-            defaultValue="#000"
-        />
-    );
-}
 const MyDropdownMenu = () => (
     <DropdownMenu
         icon={ more }
@@ -113,9 +101,9 @@ const blockProps = useBlockProps();
                 placeHolder={ __( 'Heading...' ) }
                 />
 				<PanelBody title="Color Picker" initialOpen>
-					<Example 
-                    color={ textColor }
-                    onChangeComplete={ ( color ) => handleColorChange( color.hex, 'textColor' ) }
+                     <ColorPicker
+                        color={ textColor }
+                        onChangeComplete={ ( color ) => handleColorChange( color.hex, 'textColor' ) }
                     />
 				</PanelBody>
                 <PanelBody title="User Dropdown" initialOpen>
