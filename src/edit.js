@@ -24,57 +24,11 @@ import './editor.scss';
 /**
  * Importing native color picker component
  */
-import { ColorPicker, PanelBody, DropdownMenu } from '@wordpress/components';
+import { ColorPicker, PanelBody } from '@wordpress/components';
 import { useState } from '@wordpress/element';
 import { InspectorControls, useBlockProps, RichText } from '@wordpress/block-editor';
-import {
-    more,
-    arrowLeft,
-    arrowRight,
-    arrowUp,
-    arrowDown,
-} from '@wordpress/icons';
 
-function Example( props ) {
-    const { attributes, setAttributes } = props;
-    const [color, setColor] = useState();
-    return (
-        <ColorPicker
-            color={color}
-            onChange={setColor}
-            enableAlpha
-            defaultValue="#000"
-        />
-    );
-}
-const MyDropdownMenu = () => (
-    <DropdownMenu
-        icon={ more }
-        label="Select a direction"
-        controls={ [
-            {
-                title: 'Up',
-                icon: arrowUp,
-                onClick: () => console.log( 'up' ),
-            },
-            {
-                title: 'Right',
-                icon: arrowRight,
-                onClick: () => console.log( 'right' ),
-            },
-            {
-                title: 'Down',
-                icon: arrowDown,
-                onClick: () => console.log( 'down' ),
-            },
-            {
-                title: 'Left',
-                icon: arrowLeft,
-                onClick: () => console.log( 'left' ),
-            },
-        ] }
-    />
-);
+
 /**
  * The edit function describes the structure of your block in the context of the
  * editor. This represents what the editor will render when the block is used.
@@ -84,7 +38,7 @@ const MyDropdownMenu = () => (
  * @return {WPElement} Element to render.
  */
 export default function Edit( props ) {
-    
+
 const { attributes, setAttributes } = props;
 
 // Destructure the attributes 
@@ -93,34 +47,42 @@ const {
     textColor
 } = attributes;
 
+// Function to hanle the color change for text color and background color
 const handleColorChange = ( newColor, colorAttribute ) => {
     setAttributes( {
         [ colorAttribute ]: newColor,
     } );
 };
 
+
 const blockProps = useBlockProps();
 
+// Dummy Data. Insert API data here.
+const userFetch = [
+    {
+        userName: "George Washington",
+        userBio: "Hates the British"
+    },
+    {
+        userName: "Abraham Lincoln",
+        userBio: "Likes to cut down trees"
+    }
+]
 	return (
 		<>
 			<InspectorControls>
-                <RichText
-                {...blockProps}
-                tagName="h2"
-                value={ attributes.content }
-                allowedFormats={ [ 'core/bold', 'core/italic' ] }
-                onChange={ ( content )  => setAttributes( { content} ) }
-                placeHolder={ __( 'Heading...' ) }
-                />
-				<PanelBody title="Color Picker" initialOpen>
-					<Example 
-                    color={ textColor }
-                    onChangeComplete={ ( color ) => handleColorChange( color.hex, 'textColor' ) }
+				<PanelBody title="Text Color" initialOpen>
+					<ColorPicker
+                        color={ textColor }
+                        onChangeComplete={ ( color ) => handleColorChange( color.hex, 'textColor' ) }
                     />
 				</PanelBody>
-                <PanelBody title="User Dropdown" initialOpen>
-                    <MyDropdownMenu/>
-                </PanelBody>
+                <PanelBody title="Background Color" initialOpen>
+					<ColorPicker
+                        color={ backgroundColor }
+                        onChangeComplete={ ( color ) => handleColorChange( color.hex, 'backgroundColor' ) }
+                    />
+				</PanelBody>
 			</InspectorControls>
 
 			<div class="container" { ...useBlockProps( {
@@ -129,18 +91,22 @@ const blockProps = useBlockProps();
                     color: textColor,
                 },
             }) }>
-                <h1>Title</h1>
-                <RichText
-                {...blockProps}
-                tagName="h2"
-                value={ attributes.content }
-                allowedFormats={ [ 'core/bold', 'core/italic' ] }
-                onChange={ ( content )  => setAttributes( { content} ) }
-                placeHolder={ __( 'Heading...' ) }
+                <RichText.Content
+                    tagName="h2"
+                    value={userFetch[0].userName}
                 />
-                <h1>Body</h1>
-                <input className="body-input" type="text"></input>
-                <button type="submit">Submit</button>
+                <RichText.Content
+                    tagName="p"
+                    value={userFetch[0].userBio}
+                />
+                <RichText.Content
+                    tagName="h2"
+                    value={userFetch[1].userName}
+                />
+                <RichText.Content
+                    tagName="p"
+                    value={userFetch[1].userBio}
+                />
             </div>
 		</>
 	);
