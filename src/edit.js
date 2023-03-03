@@ -34,9 +34,9 @@ import {
     arrowUp,
     arrowDown,
 } from '@wordpress/icons';
-import usericon from './Images/usericon.png';
 
-function Example() {
+function Example( props ) {
+    const { attributes, setAttributes } = props;
     const [color, setColor] = useState();
     return (
         <ColorPicker

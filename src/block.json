@@ -8,32 +8,7 @@
 	"icon": "smiley",
 	"description": "Example block scaffolded with Create Block tool.",
 	"supports": {
-		"align": true,
-		"color": {
-			"background": true,
-			"text": true
-		},
-		"__experimentalBorder": {
-			"radius": true,
-			"color": true,
-			"width": true,
-			"style": true
-		},
-		"html": false,
-		"spacing": {
-			"margin": true,
-			"padding": true
-		},
-		"typography": {
-			"fontSize": true,
-			"lineHeight": true,
-			"__experimentalFontFamily": true,
-			"__experimentalFontStyle": true,
-			"__experimentalFontWeight": true,
-			"__experimentalTextTransform": true,
-			"__experimentalTextDecoration": true,
-			"__experimentalLetterSpacing": true
-		}
+		"html": false
 	},
 	"attributes": {
 		"backgroundColor": {
@@ -42,9 +17,8 @@
 		},
 		"textColor": {
 			"type": "string",
-			"default": "#000000"
+			"default": "#000001"
 		}
-
 	},
 	"textdomain": "mast-block-project",
 	"editorScript": "file:./index.js",
