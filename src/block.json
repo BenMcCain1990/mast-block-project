@@ -18,6 +18,11 @@
 		"textColor": {
 			"type": "string",
 			"default": "#000001"
+		},
+		"content": {
+			"type": "string",
+			"source": "html",
+			"selector": "h2"
 		}
 	},
 	"textdomain": "mast-block-project",

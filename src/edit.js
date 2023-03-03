@@ -11,7 +11,7 @@ import { __ } from '@wordpress/i18n';
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
-import { useBlockProps } from '@wordpress/block-editor';
+
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -26,7 +26,7 @@ import './editor.scss';
  */
 import { ColorPicker, PanelBody, DropdownMenu } from '@wordpress/components';
 import { useState } from '@wordpress/element';
-import { InspectorControls } from '@wordpress/block-editor';
+import { InspectorControls, useBlockProps, RichText } from '@wordpress/block-editor';
 import {
     more,
     arrowLeft,
@@ -99,9 +99,19 @@ const handleColorChange = ( newColor, colorAttribute ) => {
     } );
 };
 
+const blockProps = useBlockProps();
+
 	return (
 		<>
 			<InspectorControls>
+                <RichText
+                {...blockProps}
+                tagName="h2"
+                value={ attributes.content }
+                allowedFormats={ [ 'core/bold', 'core/italic' ] }
+                onChange={ ( content )  => setAttributes( { content} ) }
+                placeHolder={ __( 'Heading...' ) }
+                />
 				<PanelBody title="Color Picker" initialOpen>
 					<Example 
                     color={ textColor }
@@ -120,7 +130,14 @@ const handleColorChange = ( newColor, colorAttribute ) => {
                 },
             }) }>
                 <h1>Title</h1>
-                <input className="title-input" type="text"></input>
+                <RichText
+                {...blockProps}
+                tagName="h2"
+                value={ attributes.content }
+                allowedFormats={ [ 'core/bold', 'core/italic' ] }
+                onChange={ ( content )  => setAttributes( { content} ) }
+                placeHolder={ __( 'Heading...' ) }
+                />
                 <h1>Body</h1>
                 <input className="body-input" type="text"></input>
                 <button type="submit">Submit</button>

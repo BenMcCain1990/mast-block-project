@@ -15,10 +15,13 @@ import { useBlockProps } from '@wordpress/block-editor';
  *
  * @return {WPElement} Element to render.
  */
-export default function save() {
+export default function save( { attributes } ) {
+
+	const blockProps = useBlockProps();
+
 	return (
-		<p { ...useBlockProps.save() }>
-			{ 'Mast Block Project – Front End Content' }
-		</p>
+		<>
+			<RichText.Content {...blockProps } tagName="h2" value={ attributes.content } />
+		</>
 	);
 }
