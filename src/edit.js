@@ -103,9 +103,9 @@ const handleColorChange = ( newColor, colorAttribute ) => {
 		<>
 			<InspectorControls>
 				<PanelBody title="Color Picker" initialOpen>
-					<Example 
-                    color={ textColor }
-                    onChangeComplete={ ( color ) => handleColorChange( color.hex, 'textColor' ) }
+                     <ColorPicker
+                        color={ textColor }
+                        onChangeComplete={ ( color ) => handleColorChange( color.hex, 'textColor' ) }
                     />
 				</PanelBody>
                 <PanelBody title="User Dropdown" initialOpen>
