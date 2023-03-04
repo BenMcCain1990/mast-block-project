@@ -24,7 +24,7 @@ import './editor.scss';
 /**
  * Importing native color picker component
  */
-import { ColorPicker, PanelBody } from '@wordpress/components';
+import { ColorPicker, PanelBody, DropdownMenu } from '@wordpress/components';
 import { useState } from '@wordpress/element';
 import { InspectorControls, useBlockProps, RichText } from '@wordpress/block-editor';
 
@@ -68,9 +68,31 @@ const userFetch = [
         userBio: "Likes to cut down trees"
     }
 ]
+
+//fetch api data and convert to json
+fetch('https://benjamin-mccain-photography.local/wp-json/wp/v2/users')
+    .then(res => res.json())
+        .then(data => console.log(data));
+
 	return (
 		<>
 			<InspectorControls>
+                <PanelBody title="Users" initialOpen>
+                    <DropdownMenu
+                        label="Users"
+                        controls={ [
+                            {
+                                title: 'User1',
+                            },
+                            {
+                                title: 'User2'
+                            },
+                            {
+                                title: 'User3'
+                            }
+                        ]}
+                    />
+                </PanelBody>
 				<PanelBody title="Text Color" initialOpen>
 					<ColorPicker
                         color={ textColor }
