@@ -25,7 +25,7 @@ import './editor.scss';
  * Importing native color picker component
  */
 import { ColorPicker, PanelBody, DropdownMenu } from '@wordpress/components';
-import { useState } from '@wordpress/element';
+import { useState, useEffect } from '@wordpress/element';
 import { InspectorControls, useBlockProps, RichText } from '@wordpress/block-editor';
 
 
@@ -57,40 +57,42 @@ const handleColorChange = ( newColor, colorAttribute ) => {
 
 const blockProps = useBlockProps();
 
-// Dummy Data. Insert API data here.
-const userFetch = [
-    {
-        userName: "George Washington",
-        userBio: "Hates the British"
-    },
-    {
-        userName: "Abraham Lincoln",
-        userBio: "Likes to cut down trees"
-    }
-]
 
 //fetch api data and convert to json
-fetch('https://benjamin-mccain-photography.local/wp-json/wp/v2/users')
-    .then(res => res.json())
-        .then(data => console.log(data));
+const [users, setUsers] = useState( [] );
+const fetchUsers = async () => {
+    const response = await fetch(
+        'https://benjamin-mccain-photography.local/wp-json/wp/v2/users'
+    );
+    const data = await response.json();
+        setUsers(data);
+};
+
+useEffect(() => {
+    fetchUsers();
+}, []);
+
+/*const userDropdown = () => {
+    users.forEach(user => {
+        const markup = `<h2>${user.name}<h2/>`;
+        const markup2 = `<p>${user.id}<p/>`;
+        document.querySelector('.name').insertAdjacentHTML('beforebegin', markup);
+        document.querySelector('p').insertAdjacentHTML('beforebegin', markup2);
+    })
+};*/
+
+const userDropdown = () => {
+    const result = users.filter(user => user.id = 1);
+    console.log(result);
+};
 
 	return (
 		<>
 			<InspectorControls>
-                <PanelBody title="Users" initialOpen>
+                <PanelBody title="Users">
                     <DropdownMenu
                         label="Users"
-                        controls={ [
-                            {
-                                title: 'User1',
-                            },
-                            {
-                                title: 'User2'
-                            },
-                            {
-                                title: 'User3'
-                            }
-                        ]}
+                        controls={ users.map(user => ( {title: user.name, onClick: userDropdown } ))}
                     />
                 </PanelBody>
 				<PanelBody title="Text Color" initialOpen>
@@ -115,19 +117,16 @@ fetch('https://benjamin-mccain-photography.local/wp-json/wp/v2/users')
             }) }>
                 <RichText.Content
                     tagName="h2"
-                    value={userFetch[0].userName}
+                    className="name"
+                    value={users.name}
                 />
                 <RichText.Content
                     tagName="p"
-                    value={userFetch[0].userBio}
-                />
-                <RichText.Content
-                    tagName="h2"
-                    value={userFetch[1].userName}
+                    value={users.id}
                 />
                 <RichText.Content
                     tagName="p"
-                    value={userFetch[1].userBio}
+                    value={users.bio}
                 />
             </div>
 		</>

@@ -81,29 +81,38 @@ function Edit(props) {
   };
   const blockProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__.useBlockProps)();
 
-  // Dummy Data. Insert API data here.
-  const userFetch = [{
-    userName: "George Washington",
-    userBio: "Hates the British"
-  }, {
-    userName: "Abraham Lincoln",
-    userBio: "Likes to cut down trees"
-  }];
-
   //fetch api data and convert to json
-  fetch('https://benjamin-mccain-photography.local/wp-json/wp/v2/users').then(res => res.json()).then(data => console.log(data));
+  const [users, setUsers] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)([]);
+  const fetchUsers = async () => {
+    const response = await fetch('https://benjamin-mccain-photography.local/wp-json/wp/v2/users');
+    const data = await response.json();
+    setUsers(data);
+  };
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
+    fetchUsers();
+  }, []);
+
+  /*const userDropdown = () => {
+      users.forEach(user => {
+          const markup = `<h2>${user.name}<h2/>`;
+          const markup2 = `<p>${user.id}<p/>`;
+          document.querySelector('.name').insertAdjacentHTML('beforebegin', markup);
+          document.querySelector('p').insertAdjacentHTML('beforebegin', markup2);
+      })
+  };*/
+
+  const userDropdown = () => {
+    const result = users.filter(user => user.id = 1);
+    console.log(result);
+  };
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__.InspectorControls, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.PanelBody, {
-    title: "Users",
-    initialOpen: true
+    title: "Users"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.DropdownMenu, {
     label: "Users",
-    controls: [{
-      title: 'User1'
-    }, {
-      title: 'User2'
-    }, {
-      title: 'User3'
-    }]
+    controls: users.map(user => ({
+      title: user.name,
+      onClick: userDropdown
+    }))
   })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.PanelBody, {
     title: "Text Color",
     initialOpen: true
@@ -125,16 +134,14 @@ function Edit(props) {
     }
   })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__.RichText.Content, {
     tagName: "h2",
-    value: userFetch[0].userName
+    className: "name",
+    value: users.name
   }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__.RichText.Content, {
     tagName: "p",
-    value: userFetch[0].userBio
-  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__.RichText.Content, {
-    tagName: "h2",
-    value: userFetch[1].userName
+    value: users.id
   }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__.RichText.Content, {
     tagName: "p",
-    value: userFetch[1].userBio
+    value: users.bio
   })));
 }
 
