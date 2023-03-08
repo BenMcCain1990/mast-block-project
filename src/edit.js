@@ -4,6 +4,7 @@
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-i18n/
  */
 import { __ } from '@wordpress/i18n';
+import apiFetch from '@wordpress/api-fetch';
 
 /**
  * React hook that is used to mark the block wrapper element.
@@ -24,7 +25,7 @@ import './editor.scss';
 /**
  * Importing native color picker component
  */
-import { ColorPicker, PanelBody, DropdownMenu } from '@wordpress/components';
+import { ColorPicker, PanelBody, DropdownMenu, SelectControl } from '@wordpress/components';
 import { useState, useEffect } from '@wordpress/element';
 import { InspectorControls, useBlockProps, RichText } from '@wordpress/block-editor';
 
@@ -57,14 +58,16 @@ const handleColorChange = ( newColor, colorAttribute ) => {
 
 const blockProps = useBlockProps();
 
+// Create an object for the selected user
+const [ selectedUser, setSelectedUser ] = useState( null );
 
 //fetch api data and convert to json
 const [users, setUsers] = useState( [] );
 const fetchUsers = async () => {
-    const response = await fetch(
-        'https://benjamin-mccain-photography.local/wp-json/wp/v2/users'
-    );
-    const data = await response.json();
+    const response = await apiFetch( {
+        path: '/wp/v2/users/'
+    } );
+    const data = await response;
         setUsers(data);
 };
 
@@ -81,6 +84,28 @@ useEffect(() => {
     })
 };*/
 
+const mappedUsers = [
+    // Set a default value when no user is selected.
+    {
+        value: 0,
+		label: 'Select a user…',
+		disabled: true,
+    },
+    // Spread the map of users into the array.
+    ...users.map(
+        ( user ) => {
+            return {
+                label: user.name,
+                value: user.id,
+                id: user.id,
+                name: user.name,
+                bio: user.description,
+                avatar: user.avatar_urls[ 96 ] ?? 'https://www.gravatar.com/avatar/?d=mystery-person'
+            };
+        }
+    )
+]
+
 const userDropdown = () => {
     const result = users.filter(user => user.id = 1);
     console.log(result);
@@ -90,9 +115,16 @@ const userDropdown = () => {
 		<>
 			<InspectorControls>
                 <PanelBody title="Users">
-                    <DropdownMenu
+                    <SelectControl
                         label="Users"
-                        controls={ users.map(user => ( {title: user.name, onClick: userDropdown } ))}
+                        options={ mappedUsers }
+                        value={ selectedUser?.id || 0 }
+                        onChange={ ( userId ) => {
+                            const userFromUsers = mappedUsers.find( ( user ) => {
+                                return user.id === parseInt( userId );
+                            } );
+                            setSelectedUser( userFromUsers );
+                        } }
                     />
                 </PanelBody>
 				<PanelBody title="Text Color" initialOpen>
@@ -109,25 +141,32 @@ const userDropdown = () => {
 				</PanelBody>
 			</InspectorControls>
 
-			<div class="container" { ...useBlockProps( {
+            <div class="container" { ...useBlockProps( {
                 style: {
                     backgroundColor,
                     color: textColor,
                 },
             }) }>
-                <RichText.Content
-                    tagName="h2"
-                    className="name"
-                    value={users.name}
-                />
-                <RichText.Content
-                    tagName="p"
-                    value={users.id}
-                />
-                <RichText.Content
-                    tagName="p"
-                    value={users.bio}
-                />
+                { selectedUser ? (
+                    <>
+                        <RichText.Content
+                            tagName="h2"
+                            className="name"
+                            value={selectedUser.name}
+                        />
+
+                        <img src={ selectedUser.avatar } />
+
+                        <RichText.Content
+                            tagName="p"
+                            value={selectedUser.bio}
+                        />
+                    </> 
+                ) : (
+                    <div>
+                        Please make a selection...
+                    </div>
+                ) }
             </div>
 		</>
 	);
